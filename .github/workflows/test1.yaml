@@ -13,4 +13,4 @@ jobs:
           run: ls -ltra
    
         - name: run shell script
-          run: echo "hello from our first wf"
+          run: ./script1.sh
