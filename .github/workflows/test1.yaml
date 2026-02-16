@@ -1,1 +1,16 @@
+name: my first workflow | shell script
 
+on:
+  push:
+    branches: main
+
+jobs:
+    first_job:
+      runs-on: ubuntu-latest
+      steps:
+
+        - name: list files
+          run: ls -ltra
+   
+        - name: run shell script
+          run: echo "hello from our first wf"
