@@ -7,10 +7,6 @@ jobs:
     cow_job:
       runs-on: ubuntu-latest
       steps:
-
-
-        - name: Upload a Build Artifact
-          uses: actions/upload-artifact@v6.0.0
         
         - name: install cowsay
           run: sudo apt-get install cowsay -y
@@ -30,3 +26,9 @@ jobs:
           
         - name: checkout repo files
           run: ls
+        
+        - name: Upload a Build Artifact
+          uses: actions/upload-artifact@v4
+          with:
+            name: dragon.txt
+            path: dragon.txt
