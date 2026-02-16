@@ -11,7 +11,7 @@ jobs:
 
 
         - name: Checkout
-          uses: actions/checkout@v6.0.2
+          uses: actions/checkout@v4
 
         - name: list files
           run: ls -ltra
@@ -20,7 +20,6 @@ jobs:
         #   run: chmod +x script1.sh
    
         - name: run shell script
-          run: 
-            |
+          run: |
             chmod +x script1.sh
              ./script1.sh
