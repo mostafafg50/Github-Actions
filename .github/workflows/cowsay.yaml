@@ -9,6 +9,9 @@ jobs:
       steps:
 
 
+        - name: Upload a Build Artifact
+          uses: actions/upload-artifact@v6.0.0
+        
         - name: install cowsay
           run: sudo apt-get install cowsay -y
 
@@ -18,8 +21,12 @@ jobs:
         - name: Text file exists
           run: grep -i "dragon" dragon.txt
         
-        - name: Read file 
-          run: cat dragon.txt
+        # - name: Read file 
+        #   run: cat dragon.txt
+        - name: run shell script
+          run: |
+            chmod +x cowdrqagon.sh
+             ./cowdrqagon.sh
           
         - name: checkout repo files
           run: ls
