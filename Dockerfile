@@ -1,5 +1,5 @@
 FROM python:slim AS builder
-WORKDIR /DProject2
-COPY . /DProject2
-COPY . .
-ENTRYPOINT ["python", "lab.py"]
+WORKDIR /app2
+COPY . /app2
+RUN chmod +x app.py
+CMD ["python", "app.py"]
