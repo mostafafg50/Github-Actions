@@ -1,0 +1,25 @@
+name: cowsay workflow | shell script
+
+on:
+  push:
+
+jobs:
+    cow_job:
+      runs-on: ubuntu-latest
+      steps:
+
+
+        - name: install cowsay
+          run: sudo apt-get install cowsay -y
+
+        - name: Execute cowsay
+          run: cowsay f dragon "Run for cover, iam a gragon" >> dragon.txt
+
+        - name: Text file exists
+          run: grep -i "dragon" gragon.txt
+        
+        - name: Read file 
+          run: cat dragon.txt
+          
+        - name: checkout repo files
+          run: ls
