@@ -19,10 +19,10 @@ jobs:
         
         # - name: Read file 
         #   run: cat dragon.txt
-        - name: run shell script
-          run: |
-            chmod +x cowdrqagon.sh
-             ./cowdrqagon.sh
+        # - name: run shell script
+        #   run: |
+        #     chmod +x cowdrqagon.sh
+        #      ./cowdrqagon.sh
           
         - name: checkout repo files
           run: ls
