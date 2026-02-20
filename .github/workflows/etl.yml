@@ -2,28 +2,26 @@ name: Data Pipeline ETL and dbt
 
 on:
   push:
-    branches: main
+    branches: [main]
 
 jobs:
   run-etl:
-    services:
-    postgres:
-      image: postgres:15
-      env:
-        POSTGRES_USER: github
-        POSTGRES_PASSWORD: github
-        POSTGRES_DB: github_db
-      ports:
-        - 5432:5432
-      options: >-
-        --health-cmd "pg_isready -U github"
-        --health-interval 10s
-        --health-timeout 5s
-        --health-retries 5
-
-
-
     runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: github
+          POSTGRES_PASSWORD: github
+          POSTGRES_DB: github_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U github"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - name: checkout repo
@@ -43,7 +41,6 @@ jobs:
       - name: run tests
         run: pytest test.py
 
-
       - name: Set DB env variables
         run: |
           echo "DB_HOST=localhost" >> $GITHUB_ENV
@@ -61,16 +58,16 @@ jobs:
           mkdir -p models
           echo -e "select 1 as id, 'test' as name" > models/sample_model.sql
           echo "github:
-          target: dev
-          outputs:
-            dev:
-              type: postgres
-              host: {{ env_var('DB_HOST') }}
-              user: {{ env_var('DB_USER') }}
-              password: {{ env_var('DB_PASSWORD') }}
-              dbname: {{ env_var('DB_NAME') }}
-              schema: public
-              threads: 1" > ~/.dbt/profiles.yml
+            target: dev
+            outputs:
+              dev:
+                type: postgres
+                host: {{ env_var('DB_HOST') }}
+                user: {{ env_var('DB_USER') }}
+                password: {{ env_var('DB_PASSWORD') }}
+                dbname: {{ env_var('DB_NAME') }}
+                schema: public
+                threads: 1" > ~/.dbt/profiles.yml
 
       - name: run dbt models
         run: dbt run
