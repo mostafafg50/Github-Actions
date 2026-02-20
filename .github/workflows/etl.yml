@@ -1,13 +1,13 @@
-name: Data Pipeline ETL and dbt
+name: Data ETL
 
 on:
   push:
-    branches: [main]
+    branches: main
 
 jobs:
-  run-etl:
+  etl_dbt_pipeline:
     runs-on: ubuntu-latest
-    
+
     services:
       postgres:
         image: postgres:15
@@ -24,38 +24,44 @@ jobs:
           --health-retries 5
 
     steps:
-      - name: checkout repo
+      # Step 1: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: setup python
+      # Step 2: Setup Python
+      - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
-      - name: Install dep
+      # Step 3: Install Python dependencies
+      - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: run ETL script
+      # Step 4: Run ETL script
+      - name: Run Python ETL
         run: python etl.py
 
-      - name: run tests
+      # Step 5: Run Python tests
+      - name: Run Python tests
         run: pytest test.py
 
-      - name: Set DB env variables
+      # Step 6: Set Postgres environment variables for dbt
+      - name: Set DB environment variables
         run: |
           echo "DB_HOST=localhost" >> $GITHUB_ENV
           echo "DB_USER=github" >> $GITHUB_ENV
           echo "DB_PASSWORD=github" >> $GITHUB_ENV
           echo "DB_NAME=github_db" >> $GITHUB_ENV
 
+      # Step 7: Install dbt
       - name: Install dbt
         run: pip install dbt-postgres
 
-      - name: Init dbt project
+      # Step 8: Configure dbt profile
+      - name: Configure dbt profile
         run: |
-          dbt init my_dbt_project
-          mkdir -p my_dbt_project/models
-          echo "select 1 as id, 'test' as name" > my_dbt_project/models/sample_model.sql
+          mkdir -p ~/.dbt
           echo "my_dbt_project:
             target: dev
             outputs:
@@ -68,14 +74,10 @@ jobs:
                 schema: public
                 threads: 1" > ~/.dbt/profiles.yml
 
+      # Step 9: Run dbt models
       - name: Run dbt models
-        run: dbt run --project-dir ./my_dbt_project
+        run: dbt run --project-dir my_dbt_project --profiles-dir ~/.dbt
 
+      # Step 10: Run dbt tests
       - name: Test dbt models
-        run: dbt test --project-dir my_dbt_project
-
-      - name: run dbt models
-        run: dbt run
-
-      - name: test dbt models
-        run: dbt test
+        run: dbt test --project-dir my_dbt_project --profiles-dir ~/.dbt
