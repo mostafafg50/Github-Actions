@@ -54,7 +54,7 @@ jobs:
       - name: install dbt
         run: pip install dbt-postgres
 
-              - name: Init dbt project
+      - name: Init dbt project
         run: |
           dbt init my_dbt_project --adapter postgres
           cd my_dbt_project
