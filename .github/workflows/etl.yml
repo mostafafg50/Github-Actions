@@ -74,10 +74,8 @@ jobs:
                 schema: public
                 threads: 1" > ~/.dbt/profiles.yml
 
-      # Step 9: Run dbt models
       - name: Run dbt models
         run: dbt run --project-dir my_dbt_project --profiles-dir ~/.dbt
 
-      # Step 10: Run dbt tests
       - name: Test dbt models
         run: dbt test --project-dir my_dbt_project --profiles-dir ~/.dbt
