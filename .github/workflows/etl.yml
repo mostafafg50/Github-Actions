@@ -48,16 +48,15 @@ jobs:
           echo "DB_PASSWORD=github" >> $GITHUB_ENV
           echo "DB_NAME=github_db" >> $GITHUB_ENV
 
-      - name: install dbt
+      - name: Install dbt
         run: pip install dbt-postgres
 
       - name: Init dbt project
         run: |
-          dbt init my_dbt_project --adapter postgres
-          cd my_dbt_project
-          mkdir -p models
-          echo -e "select 1 as id, 'test' as name" > models/sample_model.sql
-          echo "github:
+          dbt init my_dbt_project
+          mkdir -p my_dbt_project/models
+          echo "select 1 as id, 'test' as name" > my_dbt_project/models/sample_model.sql
+          echo "my_dbt_project:
             target: dev
             outputs:
               dev:
@@ -68,6 +67,12 @@ jobs:
                 dbname: {{ env_var('DB_NAME') }}
                 schema: public
                 threads: 1" > ~/.dbt/profiles.yml
+
+      - name: Run dbt models
+        run: dbt run --project-dir my_dbt_project
+
+      - name: Test dbt models
+        run: dbt test --project-dir my_dbt_project
 
       - name: run dbt models
         run: dbt run
