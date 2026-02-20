@@ -6,6 +6,23 @@ on:
 
 jobs:
   run-etl:
+    services:
+    postgres:
+      image: postgres:15
+      env:
+        POSTGRES_USER: github
+        POSTGRES_PASSWORD: github
+        POSTGRES_DB: github_db
+      ports:
+        - 5432:5432
+      options: >-
+        --health-cmd "pg_isready -U github"
+        --health-interval 10s
+        --health-timeout 5s
+        --health-retries 5
+
+
+
     runs-on: ubuntu-latest
 
     steps:
@@ -27,12 +44,36 @@ jobs:
         run: pytest test.py
 
 
+      - name: Set DB env variables
+        run: |
+          echo "DB_HOST=localhost" >> $GITHUB_ENV
+          echo "DB_USER=github" >> $GITHUB_ENV
+          echo "DB_PASSWORD=github" >> $GITHUB_ENV
+          echo "DB_NAME=github_db" >> $GITHUB_ENV
 
-      # - name: install dbt
-      #   run: pip install dbt-postgres
+      - name: install dbt
+        run: pip install dbt-postgres
 
-      # - name: run dbt models
-      #   run: dbt run
+              - name: Init dbt project
+        run: |
+          dbt init my_dbt_project --adapter postgres
+          cd my_dbt_project
+          mkdir -p models
+          echo -e "select 1 as id, 'test' as name" > models/sample_model.sql
+          echo "github:
+          target: dev
+          outputs:
+            dev:
+              type: postgres
+              host: {{ env_var('DB_HOST') }}
+              user: {{ env_var('DB_USER') }}
+              password: {{ env_var('DB_PASSWORD') }}
+              dbname: {{ env_var('DB_NAME') }}
+              schema: public
+              threads: 1" > ~/.dbt/profiles.yml
 
-      # - name: test dbt models
-      #   run: dbt test
+      - name: run dbt models
+        run: dbt run
+
+      - name: test dbt models
+        run: dbt test
