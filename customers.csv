@@ -1,0 +1,4 @@
+id,customer,email
+1,Ahmed,ahmed@test.com
+2,Sara,sara@test.com
+3,,invalid@email.com
