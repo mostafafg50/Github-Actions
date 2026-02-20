@@ -4,7 +4,7 @@ import os
 
 
 def extract():
-    df = pd.read_csv("data/customers.csv")
+    df = pd.read_csv("./customers.csv")
     return df
 
 
@@ -15,14 +15,9 @@ def transform(df):
 
 
 def load(df):
-    db_url = os.getenv("DATABASE_URL")
-    engine = create_engine(db_url)
-    df.to_sql(
-        "raw_customers",
-        engine,
-        if_exists="replace",
-        index=False
-    )
+    output_path = os.getenv("OUTPUT_PATH", "output/raw_customers.csv")
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    df.to_csv(output_path, index=False)
 
 
 def run_etl():

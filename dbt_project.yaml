@@ -1,0 +1,5 @@
+name: simple_project
+version: "1.0"
+profile: simple_profile
+
+model-paths: ["models"]
