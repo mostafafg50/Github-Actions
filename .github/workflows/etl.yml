@@ -69,7 +69,7 @@ jobs:
                 threads: 1" > ~/.dbt/profiles.yml
 
       - name: Run dbt models
-        run: dbt run --project-dir my_dbt_project
+        run: dbt run --project-dir ./my_dbt_project
 
       - name: Test dbt models
         run: dbt test --project-dir my_dbt_project
