@@ -62,17 +62,19 @@ jobs:
       - name: Configure dbt profile
         run: |
           mkdir -p ~/.dbt
-          echo "my_dbt_project:
+          cat > ~/.dbt/profiles.yml <<EOF
+          my_dbt_project:
             target: dev
             outputs:
               dev:
                 type: postgres
-                host: {{ env_var('DB_HOST') }}
-                user: {{ env_var('DB_USER') }}
-                password: {{ env_var('DB_PASSWORD') }}
-                dbname: {{ env_var('DB_NAME') }}
+                host: $DB_HOST
+                user: $DB_USER
+                password: $DB_PASSWORD
+                dbname: $DB_NAME
                 schema: public
-                threads: 1" > ~/.dbt/profiles.yaml
+                threads: 1
+          EOF
 
       - name: Run dbt models
         run: dbt run --project-dir my_dbt_project --profiles-dir ~/.dbt
