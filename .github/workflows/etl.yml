@@ -72,7 +72,7 @@ jobs:
                 password: {{ env_var('DB_PASSWORD') }}
                 dbname: {{ env_var('DB_NAME') }}
                 schema: public
-                threads: 1" > ~/.dbt/profiles.yml
+                threads: 1" > ~/.dbt/profiles.yaml
 
       # - name: Run dbt models
       #   run: dbt run --project-dir my_dbt_project --profiles-dir ~/.dbt
