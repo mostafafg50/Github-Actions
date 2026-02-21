@@ -46,7 +46,7 @@ jobs:
       - name: Run Python tests
         run: pytest test.py
 
-      Step 6: Set Postgres environment variables for dbt
+      # Step 6: Set Postgres environment variables for dbt
       - name: Set DB environment variables
         run: |
           echo "DB_HOST=localhost" >> $GITHUB_ENV
