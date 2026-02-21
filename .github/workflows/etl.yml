@@ -46,33 +46,33 @@ jobs:
       - name: Run Python tests
         run: pytest test.py
 
-      # Step 6: Set Postgres environment variables for dbt
-      # - name: Set DB environment variables
-      #   run: |
-      #     echo "DB_HOST=localhost" >> $GITHUB_ENV
-      #     echo "DB_USER=github" >> $GITHUB_ENV
-      #     echo "DB_PASSWORD=github" >> $GITHUB_ENV
-      #     echo "DB_NAME=github_db" >> $GITHUB_ENV
+      Step 6: Set Postgres environment variables for dbt
+      - name: Set DB environment variables
+        run: |
+          echo "DB_HOST=localhost" >> $GITHUB_ENV
+          echo "DB_USER=github" >> $GITHUB_ENV
+          echo "DB_PASSWORD=github" >> $GITHUB_ENV
+          echo "DB_NAME=github_db" >> $GITHUB_ENV
 
-      # # Step 7: Install dbt
-      # - name: Install dbt
-      #   run: pip install dbt-postgres
+      # Step 7: Install dbt
+      - name: Install dbt
+        run: pip install dbt-postgres
 
-      # # Step 8: Configure dbt profile
-      # - name: Configure dbt profile
-      #   run: |
-      #     mkdir -p ~/.dbt
-      #     echo "my_dbt_project:
-      #       target: dev
-      #       outputs:
-      #         dev:
-      #           type: postgres
-      #           host: {{ env_var('DB_HOST') }}
-      #           user: {{ env_var('DB_USER') }}
-      #           password: {{ env_var('DB_PASSWORD') }}
-      #           dbname: {{ env_var('DB_NAME') }}
-      #           schema: public
-      #           threads: 1" > ~/.dbt/profiles.yml
+      # Step 8: Configure dbt profile
+      - name: Configure dbt profile
+        run: |
+          mkdir -p ~/.dbt
+          echo "my_dbt_project:
+            target: dev
+            outputs:
+              dev:
+                type: postgres
+                host: {{ env_var('DB_HOST') }}
+                user: {{ env_var('DB_USER') }}
+                password: {{ env_var('DB_PASSWORD') }}
+                dbname: {{ env_var('DB_NAME') }}
+                schema: public
+                threads: 1" > ~/.dbt/profiles.yml
 
       # - name: Run dbt models
       #   run: dbt run --project-dir my_dbt_project --profiles-dir ~/.dbt
